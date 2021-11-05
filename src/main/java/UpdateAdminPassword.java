@@ -31,14 +31,14 @@ public class UpdateAdminPassword {
         Statement statement = connection.createStatement();
 
         // change the customers table password column from VARCHAR(20) to VARCHAR(128)
-        String backupQuery = "CREATE TABLE employees_backup AS SELECT * FROM employees;";
-        int backupResult = statement.executeUpdate(backupQuery);
-        System.out.println("altering employees table schema completed, " + backupResult + " rows affected");
+//        String backupQuery = "CREATE TABLE employees_backup AS SELECT * FROM employees;";
+//        int backupResult = statement.executeUpdate(backupQuery);
+//        System.out.println("altering employees table schema completed, " + backupResult + " rows affected");
 
         // change the customers table password column from VARCHAR(20) to VARCHAR(128)
-        String alterQuery = "ALTER TABLE employees MODIFY COLUMN password VARCHAR(128)";
-        int alterResult = statement.executeUpdate(alterQuery);
-        System.out.println("altering employees table schema completed, " + alterResult + " rows affected");
+//        String alterQuery = "ALTER TABLE employees MODIFY COLUMN password VARCHAR(128)";
+//        int alterResult = statement.executeUpdate(alterQuery);
+//        System.out.println("altering employees table schema completed, " + alterResult + " rows affected");
 
         // get the ID and password for each customer
         String query = "SELECT email, password from employees";
@@ -55,14 +55,16 @@ public class UpdateAdminPassword {
         while (rs.next()) {
             // get the ID and plain text password from current table
             String email = rs.getString("email");
+            System.out.println(email);
             String password = rs.getString("password");
             
             // encrypt the password using StrongPasswordEncryptor
             String encryptedPassword = passwordEncryptor.encryptPassword(password);
 
             // generate the update query
-            String updateQuery = String.format("UPDATE employees SET password='%s' WHERE email=%s;", encryptedPassword,
+            String updateQuery = String.format("UPDATE employees SET password='%s' WHERE email='%s';", encryptedPassword,
                 email);
+            System.out.println(updateQuery);
             updateQueryList.add(updateQuery);
         }
         rs.close();
